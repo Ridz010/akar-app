@@ -29,6 +29,7 @@ konservasi.
 - [Tangkapan layar](#tangkapan-layar)
 - [Tech stack](#tech-stack)
 - [Arsitektur](#arsitektur)
+- [Diagram sistem](#diagram-sistem)
 - [Struktur repositori](#struktur-repositori)
 - [Memulai](#memulai)
 - [Variabel lingkungan](#variabel-lingkungan)
@@ -154,6 +155,50 @@ Kode web disusun sebagai _feature-based modular monolith_: setiap fitur di `src/
 memiliki `components/`, `queries.ts`, `actions.ts`, `schemas.ts`, `types.ts`, dan `index.ts`.
 Aturan lengkap ada di [AGENTS.md](AGENTS.md).
 
+## Diagram sistem
+
+### Arsitektur sistem
+
+![Arsitektur sistem AKAR: lapisan presentasi, keamanan dan akses, layanan aplikasi, pemrosesan AI, serta data dan layanan eksternal](docs/flow/Gambar_3.1_Arsitektur_Sistem_AKAR_v2.png)
+
+Lima lapisan sistem: antarmuka responsif untuk tiga peran, autentikasi dan RLS, layanan bisnis dan
+pendukung di Next.js, alur klasifikasi spesies di FastAPI, serta Supabase, Leaflet, OpenStreetMap,
+dan Geolocation API.
+
+> Implementasi saat ini mengklasifikasikan spesies dengan `openai/gpt-4o-mini` melalui OpenRouter.
+> Klasifier CNN dengan transfer learning adalah rencana model terlatih berikutnya; lihat
+> [ml/README.md](ml/README.md#rencana-model-terlatih).
+
+### Alur pengguna
+
+![Alur pengguna AKAR dari login, pindai AI, laporan pengamatan, verifikasi admin, hingga peta dan aktivitas konservasi](docs/flow/Gambar_3.2_User_Flow_AKAR_v2.png)
+
+Tiga jalur utama setelah login: **Pindai AI** (unggah foto, klasifikasi, skor keyakinan),
+**laporan pengamatan** (isi data, tinjauan admin, keputusan verified / revision required /
+rejected, lalu aktivitas konservasi), dan **peta** (filter, detail titik, riwayat lokasi).
+
+### Entity relationship diagram
+
+![ERD basis data AKAR: 11 tabel, 1 view, dan 20 relasi foreign key](docs/erd/erd-akar.png)
+
+Skema disusun dari `supabase/migrations/`. `profiles` menjadi pusat yang dirujuk hampir semua tabel,
+sedangkan `observations` menghubungkan lokasi, spesies, prediksi AI, keputusan verifikasi, dan
+aktivitas. Notasi _crow's foot_: sisi bercabang berarti "banyak", dua garis berarti "tepat satu",
+dan lingkaran berarti opsional.
+
+| Tabel                   | Isi                                                     |
+| ----------------------- | ------------------------------------------------------- |
+| `profiles`              | Pengguna, peran, dan kelompok (1:1 dengan `auth.users`) |
+| `conservation_groups`   | Kelompok konservasi pengelola wilayah                   |
+| `species`               | Katalog spesies dan ciri pembeda daun                   |
+| `locations`             | Titik pemantauan bernama                                |
+| `observations`          | Laporan kondisi mangrove                                |
+| `predictions`           | Hasil Pindai AI per foto                                |
+| `verifications`         | Riwayat keputusan administrator                         |
+| `activities`            | Kegiatan konservasi                                     |
+| `activity_participants` | Peserta kegiatan (many-to-many)                         |
+| `articles`              | Artikel edukasi                                         |
+
 ## Struktur repositori
 
 ```
@@ -170,7 +215,7 @@ Aturan lengkap ada di [AGENTS.md](AGENTS.md).
 ├── supabase/                migrations/, seed.sql, config.toml
 ├── scripts/seed-demo.mjs    data demo opsional
 ├── ml/                      metode identifikasi dan rencana model
-├── docs/                    sistem desain, peta aset, kredit, tangkapan layar
+├── docs/                    diagram (flow, erd), sistem desain, peta aset, kredit, tangkapan layar
 └── public/                  ikon dan foto web (public/img/web)
 ```
 
