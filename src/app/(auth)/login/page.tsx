@@ -1,14 +1,17 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
 
 import { AuthCard } from '@/components/shared/auth-card'
 import { LoginForm } from '@/features/auth'
+import { getCurrentUser } from '@/lib/auth/get-current-user'
 
 export const metadata: Metadata = { title: 'Masuk' }
 
 async function LoginFormWithRedirect({ searchParams }: PageProps<'/login'>) {
-  const { next } = await searchParams
+  const [{ next }, user] = await Promise.all([searchParams, getCurrentUser()])
+  if (user) redirect('/dashboard')
   return <LoginForm next={typeof next === 'string' ? next : undefined} />
 }
 

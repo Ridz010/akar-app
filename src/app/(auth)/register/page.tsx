@@ -1,15 +1,18 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
 
 import { AuthCard } from '@/components/shared/auth-card'
 import { images } from '@/config/images'
 import { RegisterForm } from '@/features/auth'
+import { getCurrentUser } from '@/lib/auth/get-current-user'
 
 export const metadata: Metadata = { title: 'Daftar' }
 
 async function RegisterFormWithEmail({ searchParams }: PageProps<'/register'>) {
-  const { email } = await searchParams
+  const [{ email }, user] = await Promise.all([searchParams, getCurrentUser()])
+  if (user) redirect('/dashboard')
   return <RegisterForm defaultEmail={typeof email === 'string' ? email : undefined} />
 }
 

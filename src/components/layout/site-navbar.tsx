@@ -17,6 +17,7 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import { landingNav } from '@/config/site'
+import { useSignedIn } from '@/hooks/use-signed-in'
 import { cn } from '@/lib/utils'
 
 const WATER_SPLASH = ['#2f7fb8', '#5ba8d9', '#8fcbea', '#bde6f7']
@@ -75,6 +76,7 @@ function activeIndexFor(pathname: string | null, featuresInView: boolean) {
 }
 
 function NavbarView({ pathname }: { pathname: string | null }) {
+  const signedIn = useSignedIn(pathname)
   const isHome = pathname === '/'
   const scrolled = useScrolled(24)
   const featuresInView = useSectionInView('fitur', isHome)
@@ -112,26 +114,42 @@ function NavbarView({ pathname }: { pathname: string | null }) {
         </div>
 
         <div className="hidden items-center gap-1 md:flex">
-          <Link
-            href="/login"
-            className={cn(
-              'rounded-full px-4 py-2 text-sm transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
-              overPhoto ? 'text-white hover:bg-white/15' : 'text-ink hover:bg-surface',
-            )}
-          >
-            Masuk
-          </Link>
-          <Link
-            href="/register"
-            className={cn(
-              'inline-flex h-10 items-center rounded-full px-5 text-sm transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
-              overPhoto
-                ? 'bg-white text-ink hover:bg-white/90'
-                : 'bg-sage-900 text-white hover:bg-sage-800',
-            )}
-          >
-            Daftar
-          </Link>
+          {signedIn ? (
+            <Link
+              href="/dashboard"
+              className={cn(
+                'inline-flex h-10 items-center rounded-full px-5 text-sm transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
+                overPhoto
+                  ? 'bg-white text-ink hover:bg-white/90'
+                  : 'bg-sage-900 text-white hover:bg-sage-800',
+              )}
+            >
+              Dasbor
+            </Link>
+          ) : (
+            <>
+              <Link
+                href="/login"
+                className={cn(
+                  'rounded-full px-4 py-2 text-sm transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
+                  overPhoto ? 'text-white hover:bg-white/15' : 'text-ink hover:bg-surface',
+                )}
+              >
+                Masuk
+              </Link>
+              <Link
+                href="/register"
+                className={cn(
+                  'inline-flex h-10 items-center rounded-full px-5 text-sm transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
+                  overPhoto
+                    ? 'bg-white text-ink hover:bg-white/90'
+                    : 'bg-sage-900 text-white hover:bg-sage-800',
+                )}
+              >
+                Daftar
+              </Link>
+            </>
+          )}
         </div>
 
         <Sheet open={open} onOpenChange={setOpen}>
@@ -166,20 +184,32 @@ function NavbarView({ pathname }: { pathname: string | null }) {
               ))}
             </ul>
             <div className="mt-auto flex flex-col gap-2 pt-8">
-              <Link
-                href="/login"
-                onClick={() => setOpen(false)}
-                className={cn(buttonVariants({ variant: 'outline' }), 'h-11 rounded-full')}
-              >
-                Masuk
-              </Link>
-              <Link
-                href="/register"
-                onClick={() => setOpen(false)}
-                className="inline-flex h-11 items-center justify-center rounded-full bg-sage-900 text-sm text-white"
-              >
-                Daftar
-              </Link>
+              {signedIn ? (
+                <Link
+                  href="/dashboard"
+                  onClick={() => setOpen(false)}
+                  className="inline-flex h-11 items-center justify-center rounded-full bg-sage-900 text-sm text-white"
+                >
+                  Dasbor
+                </Link>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    onClick={() => setOpen(false)}
+                    className={cn(buttonVariants({ variant: 'outline' }), 'h-11 rounded-full')}
+                  >
+                    Masuk
+                  </Link>
+                  <Link
+                    href="/register"
+                    onClick={() => setOpen(false)}
+                    className="inline-flex h-11 items-center justify-center rounded-full bg-sage-900 text-sm text-white"
+                  >
+                    Daftar
+                  </Link>
+                </>
+              )}
             </div>
           </SheetContent>
         </Sheet>

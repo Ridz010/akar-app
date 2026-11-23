@@ -245,6 +245,9 @@ Akun demo memakai kata sandi `AkarDemo#2026` (bisa diganti lewat `DEMO_PASSWORD`
 `demo-admin@example.com`, `demo-koordinator@example.com`, `demo-relawan@example.com`, dan
 `demo-relawan2@example.com`. Jangan jalankan di project produksi.
 
+Halaman login menampilkan panel **akun demo** (sekali klik langsung masuk) selama
+`NEXT_PUBLIC_DEMO_LOGIN` bukan `off`.
+
 Untuk admin sungguhan pertama, daftar lewat `/register` lalu jalankan SQL di
 [backend/README.md §7.4](backend/README.md#74-membuat-admin-pertama).
 
@@ -259,6 +262,7 @@ Untuk admin sungguhan pertama, daftar lewat `/register` lalu jalankan SQL di
 | `SUPABASE_SECRET_KEY`                  | opsional   | Hanya di server                                   |
 | `NEXT_PUBLIC_SITE_URL`                 | disarankan | URL situs untuk metadata dan tautan email         |
 | `BACKEND_API_URL`                      | untuk scan | URL backend FastAPI, mis. `http://localhost:8000` |
+| `NEXT_PUBLIC_DEMO_LOGIN`               | tidak      | Isi `off` untuk menyembunyikan panel akun demo    |
 
 ### Backend (`backend/.env`)
 
