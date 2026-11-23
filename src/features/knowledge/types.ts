@@ -1,10 +1,3 @@
-export type SpeciesProfile = {
-  scientificName: string
-  localName: string
-  family: string
-  traits: { label: string; value: string }[]
-}
-
 export type Guide = {
   slug: string
   title: string

@@ -8,7 +8,13 @@ import AccordionGallery from '@/components/motion/AccordionGallery'
 import SplitText from '@/components/motion/SplitText'
 import { images } from '@/config/images'
 import { optimizedImage } from '@/lib/image'
-import { ArticleList, GuideList, SpeciesGrid, listPublishedArticles } from '@/features/knowledge'
+import {
+  ArticleList,
+  GuideList,
+  SpeciesCatalog,
+  listPublishedArticles,
+  listSpecies,
+} from '@/features/knowledge'
 
 export const metadata: Metadata = { title: 'Edukasi mangrove' }
 
@@ -19,6 +25,21 @@ const GALLERY = [
   { label: 'Bibit di pesisir', image: images.saplings },
   { label: 'Tajuk dari udara', image: images.aerialCanopy },
 ]
+
+async function Species() {
+  const species = await listSpecies()
+  return <SpeciesCatalog species={species} />
+}
+
+function SpeciesSkeleton() {
+  return (
+    <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+      {[0, 1, 2].map((index) => (
+        <div key={index} className="h-[28rem] animate-pulse rounded-[1.5rem] bg-surface" />
+      ))}
+    </div>
+  )
+}
 
 async function Articles() {
   const articles = await listPublishedArticles()
@@ -94,11 +115,13 @@ export default function KnowledgePage() {
           <SectionIntro
             id="spesies-title"
             label="Spesies"
-            title="Empat mangrove yang umum di pesisir Indonesia"
-            description="Kenali dari bentuk daun dan akarnya. Daftar ini untuk pengenalan, bukan daftar spesies yang didukung model."
+            title="Mangrove yang umum di pesisir Indonesia"
+            description="Kenali dari foto dan ciri pembeda daunnya. Spesies berlabel Pindai AI dapat dikenali langsung dari foto daunmu."
           />
           <div className="mt-14">
-            <SpeciesGrid />
+            <Suspense fallback={<SpeciesSkeleton />}>
+              <Species />
+            </Suspense>
           </div>
         </div>
       </section>

@@ -1,49 +1,6 @@
 import { SITE_CONDITION_LABELS } from '@/config/constants'
 
-import type { Guide, SpeciesProfile } from './types'
-
-export const SPECIES_PROFILES: SpeciesProfile[] = [
-  {
-    scientificName: 'Rhizophora mucronata',
-    localName: 'Bakau hitam',
-    family: 'Rhizophoraceae',
-    traits: [
-      { label: 'Daun', value: 'Lebar dan jorong dengan ujung meruncing seperti duri kecil.' },
-      { label: 'Akar', value: 'Akar tunjang melengkung dari batang ke lumpur.' },
-      { label: 'Ciri lain', value: 'Sisi bawah daun berbintik cokelat kehitaman.' },
-    ],
-  },
-  {
-    scientificName: 'Avicennia marina',
-    localName: 'Api-api putih',
-    family: 'Acanthaceae',
-    traits: [
-      { label: 'Daun', value: 'Atas hijau mengilap, bawah keabu-abuan dan berbulu halus.' },
-      { label: 'Akar', value: 'Akar napas kecil tegak seperti pensil di sekitar pohon.' },
-      { label: 'Ciri lain', value: 'Kristal garam kadang terlihat di permukaan daun.' },
-    ],
-  },
-  {
-    scientificName: 'Sonneratia alba',
-    localName: 'Pedada',
-    family: 'Lythraceae',
-    traits: [
-      { label: 'Daun', value: 'Membulat, tebal, dan tumbuh berhadapan.' },
-      { label: 'Akar', value: 'Akar napas berbentuk kerucut muncul dari lumpur.' },
-      { label: 'Ciri lain', value: 'Buah bulat pipih dengan kelopak berbentuk bintang.' },
-    ],
-  },
-  {
-    scientificName: 'Bruguiera gymnorrhiza',
-    localName: 'Tancang',
-    family: 'Rhizophoraceae',
-    traits: [
-      { label: 'Daun', value: 'Jorong, tebal seperti kulit, ujung meruncing.' },
-      { label: 'Akar', value: 'Akar lutut yang menyembul melengkung dari tanah.' },
-      { label: 'Ciri lain', value: 'Kelopak bunga merah dengan banyak cuping.' },
-    ],
-  },
-]
+import type { Guide } from './types'
 
 export const GUIDES: Guide[] = [
   {
