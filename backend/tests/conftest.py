@@ -12,6 +12,7 @@ from fastapi.testclient import TestClient
 from PIL import Image
 
 from app.api.deps import get_current_user, get_identifier, get_repository
+from app.core.config import get_settings
 from app.core.security import CurrentUser
 from app.main import create_app
 from app.services.identifier import Ranking, SpeciesOption
@@ -104,7 +105,7 @@ def repository() -> FakeRepository:
 @pytest.fixture
 def make_client(identifier: FakeIdentifier, repository: FakeRepository):
     def build(user: CurrentUser | None = USER, raise_errors: bool = True) -> TestClient:
-        app = create_app()
+        app = create_app(get_settings())
         app.dependency_overrides[get_identifier] = lambda: identifier
         app.dependency_overrides[get_repository] = lambda: repository
         if user is not None:

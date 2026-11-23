@@ -124,3 +124,24 @@ def test_low_agreement_cannot_be_confident(make_client, identifier, repository, 
     assert body["prediction_status"] == "needs_review"
     assert body["observed_traits"] == ["Ujung daun berduri kecil"]
     assert repository.rows[0]["observed_traits"] == ["Ujung daun berduri kecil"]
+
+
+def test_root_lists_service_links(make_client):
+    with make_client() as client:
+        body = client.get("/").json()
+    assert body["status"] == "ok"
+    assert body["health"] == "/health"
+
+
+def test_missing_env_reports_names_instead_of_crashing():
+    from fastapi.testclient import TestClient
+
+    from app.main import create_misconfigured_app
+
+    client = TestClient(create_misconfigured_app(["SUPABASE_URL", "SUPABASE_SECRET_KEY"]))
+    health = client.get("/health")
+    assert health.status_code == 503
+    assert health.json()["missing_env"] == ["SUPABASE_URL", "SUPABASE_SECRET_KEY"]
+    scan = client.post("/v1/predictions")
+    assert scan.status_code == 503
+    assert scan.json()["error"]["code"] == "misconfigured"
